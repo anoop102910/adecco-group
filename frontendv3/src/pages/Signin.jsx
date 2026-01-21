@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export const SigninPage = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export const SigninPage = () => {
     e.preventDefault();
     try {
       console.log(form);
-      const res = await fetch("http://localhost:5001/auth/signup", form);
+      const res = await axios.post("http://localhost:5001/auth/signup", form);
       navigate("/login");
 
       console.log(res);
