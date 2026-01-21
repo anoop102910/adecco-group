@@ -3,12 +3,9 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 
-// signup
 exports.signup = async (req, res) => {
   try {
-    // fetch data
     const { name, email, password } = req.body;
-    // validation
     if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -22,15 +19,12 @@ exports.signup = async (req, res) => {
         message: "User already exist ",
       });
     }
-    // hash password
     const hashPassword = await bcrypt.hash(password, 10);
-    // create entry in db
     const user = await User.create({
       name,
       email,
       password: hashPassword,
     });
-    // return response
     return res.status(201).json({
       success: true,
       message: "user created successfully",
@@ -44,12 +38,9 @@ exports.signup = async (req, res) => {
   }
 };
 
-// login
 exports.login = async (req, res) => {
   try {
-    // fetch data from the email
     const { email, password } = req.body;
-    // validation
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -70,29 +61,19 @@ exports.login = async (req, res) => {
         message: "Incorrect password",
       });
     }
-    // Geneate token
     const payload = {
       email: user.email,
       id: user._id,
       role: user.role,
     };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign(payload, "token", {
       expiresIn: "2h",
     });
-    user = user.toObject();
-    user.token = token;
-    user.password = undefined;
-    //  geneate cookies
-    const options = {
-      expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-      httpOnly: true,
-    };
-    return res.cookie("token", token, options).status(200).json({
-      success: true,
+
+    return {
+      sucess: true,
       token,
-      user,
-      message: "user logged in successfully",
-    });
+    };
   } catch (error) {
     return res.status(500).json({
       success: false,
