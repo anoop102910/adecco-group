@@ -15,7 +15,8 @@ export const LoginPage = () => {
       console.log(form);
       const res = await axios.post("http://localhost:5001/auth/login", form);
       console.log(res);
-      const token = res.token;
+      const token = res.data.token;
+      console.log("token", token);
       localStorage.setItem("token", token);
       navigate("/");
       console.log(res);

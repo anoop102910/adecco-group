@@ -1,25 +1,24 @@
 const jwt = require("jsonwebtoken");
-const user = require("../model/user.model");
 
 require("dotenv").config();
-exports.auth = (req, res, next) => {
+exports.authMiddlware = (req, res, next) => {
   try {
-    // extraxt token
-    const token =
-      req.body.token || req.cookies.token || req.header("Authorization").replace("Bearer ", "");
+    const token = req.header("Authorization").replace("Bearer ", "");
+
+    console.log("token = ", token);
     if (!token) {
       return res.status(401).json({
         success: false,
         message: "Token misssing",
       });
     }
-    // verify token
     try {
-      const payload = jwt.verify(token, process.env.JWT_SECRET);
+      const payload = jwt.verify(token, "secret");
       console.log(payload);
-      req.user = payload;
+      req.userId = payload.id;
       next();
     } catch (error) {
+      console.log(error);
       return res.status(401).json({
         success: false,
         message: "Invalid token",

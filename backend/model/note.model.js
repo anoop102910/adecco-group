@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
-const notepadSchema = new mongoose.Schema({
+const note = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserModel",
+  },
   title: {
     type: String,
     required: true,
@@ -19,6 +23,6 @@ const notepadSchema = new mongoose.Schema({
   },
 });
 
-const notepadModel = mongoose.model("Notepad", notepadSchema);
+const noteModel = mongoose.model("Notepad", note);
 
-module.exports = notepadModel;
+module.exports = noteModel;

@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth.route");
+const noteRoutes = require("./routes/note.route");
 
 const connectToDb = () => {
   try {
@@ -18,6 +19,7 @@ connectToDb();
 app.use(cors({ origin: "http://localhost:5173" }));
 app.use(bodyParser.json());
 app.use("/auth", authRoutes);
+app.use("/notes", noteRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
